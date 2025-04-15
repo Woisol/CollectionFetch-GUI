@@ -1,0 +1,52 @@
+<mxfile host="65bd71144e">
+    <diagram id="A8_xx40gqosudUakAoQQ" name="第 1 页">
+        <mxGraphModel dx="799" dy="809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="250" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fontStyle=0" vertex="1" parent="1">
+                    <mxGeometry x="120" y="40" width="280" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="内容查询下载" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="70" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="搜索" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="190" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Nginx Autoindex" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="120" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="后端脚本" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="360" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="目录快速跳转" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="130" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="访问权限控制" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="340" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="登录" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="280" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="收藏整合&lt;div&gt;关系编辑&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="420" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="刷新" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="60" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="刷新" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="120" width="80" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
