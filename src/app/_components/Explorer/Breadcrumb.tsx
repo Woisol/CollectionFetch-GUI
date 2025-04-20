@@ -40,7 +40,7 @@ export default function Breadcrumb( {paths,dropdown}:breadcrumbProps) {
 function Sep() {
 	return (
 		<BreadcrumbSeparator>
-		<Slash/>
+			<Slash/>
 		</BreadcrumbSeparator>
 	)
 }

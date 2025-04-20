@@ -45,6 +45,7 @@
 @theme inline {
   --spacing-header: 56px;
   --spacing-content: calc(100vh - var(--spacing-header));
+  --radius-default: var(--radius-2xl);
 
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);

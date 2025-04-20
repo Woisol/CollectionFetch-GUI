@@ -1,8 +1,8 @@
 import {JSDOM} from 'jsdom'
-import { Autoindex } from './types'
+import { Autoindex_Raw } from './types'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-function decodeAutoindex(html: string):Autoindex[] {
-	const res:Autoindex[] = []
+export function decodeAutoindex(html: string):Autoindex_Raw[] {
+	const res:Autoindex_Raw[] = []
 
 	const dom = new JSDOM(html)
 	const bodylines = dom.window.document.body.innerHTML.split('\n')
@@ -20,7 +20,7 @@ function decodeAutoindex(html: string):Autoindex[] {
 	}
 }
 
-function formatDate(date: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
+export function formatDate(date: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
 		const pad = function (s:number) { return s < 10 ? '0' + s : s }
 		const mon = function (m:number) { return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m] }
 		return DATETIME_FORMAT
