@@ -109,6 +109,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
 				</TableBody>
 			</Table>
+			{/* @todo 分页还没做呢…… */}
 			<div className="mt-4 flex justify-center">
 				<Pagination>
 					<PaginationContent>
