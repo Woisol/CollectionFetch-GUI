@@ -1,8 +1,8 @@
 import {JSDOM} from 'jsdom'
-import { Autoindex_Raw } from './types'
+import { Autoindex_Data } from './types'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-export function decodeAutoindex(html: string):Autoindex_Raw[] {
-	const res:Autoindex_Raw[] = []
+export function decodeAutoindex(html: string): Autoindex_Data[] {
+	const res: Autoindex_Data[] = []
 
 	const dom = new JSDOM(html)
 	const bodylines = dom.window.document.body.innerHTML.split('\n')

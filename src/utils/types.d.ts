@@ -4,10 +4,25 @@ export type Autoindex_Raw = {
 	size: string,
 	modifiedAt: Date,
 }
-export type Autoindex = {
-	name: string,
-	href: string,
-	size: string,
-	modifiedAt: string,
-	children: Autoindex[]
+export type Indexes = Autoindex_Raw[]
+
+export type Path = string[]
+export type PathColect = {
+	cur: string,
+	collect: string[]
+	// subPath: Path[],
+}
+export type PathManager = {
+	paths: PathColect[],
+	indexes: Indexes
+	_push: (newPath: string, autoindex: Autoindex_Raw[]) => void,
+	next: (path: string) => void,
+	prev: () => void,
+}
+
+export type Fetcher = {
+	SERVER_URL: string,
+	DEBUG_MODE: boolean,
+	permissionToken: string,
+	fetchCollection: (path: Path) => Promise<Autoindex_Raw[]>,
 }

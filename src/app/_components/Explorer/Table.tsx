@@ -1,13 +1,17 @@
 'use client'
+import { PathManagerContext } from "@/app/page"
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious } from "@/components/ui/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
+import { pathManager } from "@/utils/usePathManager"
 import { formatDate } from "@/utils/decode"
-import { Autoindex_Raw } from "@/utils/types"
+import { fetcher } from "@/utils/fetcher"
+import { Autoindex_Raw, Indexes } from "@/utils/types"
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, TableOptions, useReactTable } from '@tanstack/react-table'
+import { useContext } from "react"
 
 interface DataTableProps<TData, TValue> {
-	data: Autoindex_Raw[],
+	data: Indexes,
 	className?: string,
 }
 
@@ -46,6 +50,7 @@ const columns: ColumnDef<Autoindex_Raw, keyof Autoindex_Raw>[] = [
 ]
 
 export default function ExplorerTable<TData, TValue>({ data, className }: DataTableProps<TData, TValue>) {
+	const pathManager = useContext(PathManagerContext)
 	const table = useReactTable({
 		data, columns,
 		getCoreRowModel: getCoreRowModel(),
@@ -60,53 +65,60 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 		},
 	})
 	return (
-		<Table className={cn("size-full rounded-b-default border-2 border-primary overflow-hidden select-none", className)}>
-			<TableHeader className="bg-gray-300">
-				{table.getHeaderGroups().map(headerGroup => {
-					return (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header, _index) => {
-								return (
-									<TableHead key={header.id} className="relative select-none overflow-visible" style={{ width: header.column.getSize() }}>
-										{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-										<div
-											className="absolute right-0 top-0 h-full w-2 cursor-col-resize bg-blue-300 opacity-0 hover:opacity-100 transition-colors duration-200 active:bg-blue-500"
-											onMouseDown={header.getResizeHandler()}
-											onTouchStart={header.getResizeHandler()}
-										/>
-									</TableHead>
-								)
-							})}
-						</TableRow>
-					)
-				})}
-			</TableHeader>
-			<TableBody>
-				{table.getRowCount() ?
-					table.getRowModel().rows.map(row => {
+		// !在Table上border和overflow-hidden冲突()
+		<div className={cn("w-full h-fit border-1 border-gray-300 overflow-hidden select-none", className)} >
+			<Table >
+				<TableHeader className="bg-background">
+					{table.getHeaderGroups().map(headerGroup => {
 						return (
-							<TableRow key={row.id}>
-								{row.getVisibleCells().map(cell => {
+							<TableRow key={headerGroup.id}>
+								{headerGroup.headers.map((header, _index) => {
 									return (
-										<TableHead key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+										<TableHead key={header.id} className="relative select-none overflow-visible" style={{ width: header.column.getSize() }}>
+											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+											<div
+												className="absolute right-0 top-0 h-full w-2 cursor-col-resize bg-blue-300 opacity-0 hover:opacity-100 transition-colors duration-200 active:bg-blue-500"
+												onMouseDown={header.getResizeHandler()}
+												onTouchStart={header.getResizeHandler()}
+											/>
 										</TableHead>
 									)
 								})}
 							</TableRow>
 						)
-					}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
-			</TableBody>
-			<div className="mt-4 flex justify-center">
-				<Pagination>
-					<PaginationContent>
-						<PaginationItem>
-							<PaginationPrevious href="#" />
-						</PaginationItem>
-						{table.getPageCount()}
-					</PaginationContent>
-				</Pagination>
-			</div>
+					})}
+				</TableHeader>
+				<TableBody>
+					{table.getRowCount() ?
+						table.getRowModel().rows.map(row => {
+							return (
+								<TableRow key={row.id} onClick={() => {
+									row.original.href === '../' ?
+										pathManager.prev() :
+										pathManager.next(row.original.href.replace(/^\//, ''))
+								}}>
+									{row.getVisibleCells().map(cell => {
+										return (
+											<TableCell key={cell.id}>
+												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											</TableCell>
+										)
+									})}
+								</TableRow>
+							)
+						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
+				</TableBody>
+				<div className="mt-4 flex justify-center">
+					<Pagination>
+						<PaginationContent>
+							<PaginationItem>
+								<PaginationPrevious href="#" />
+							</PaginationItem>
+							{table.getPageCount()}
+						</PaginationContent>
+					</Pagination>
+				</div>
 			</Table>
+		</div>
 	)
 }

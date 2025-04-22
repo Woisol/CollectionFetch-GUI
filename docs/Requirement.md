@@ -69,6 +69,8 @@ flowchart LR
 查询-->将密码原文进行rsa加密
 将密码原文进行rsa加密-->发送查询内容+permissionRSA
 发送查询内容+permissionRSA-->更新数据
+
+
 ```
 
 ## 数据模型
@@ -99,6 +101,7 @@ classDiagram
 
     }
 
+
     class SearchHandler {
         +String content
         +Collection[] results
@@ -106,9 +109,20 @@ classDiagram
         query(content:string, permissionRSA): Collection[]
     }
 
+
+    class AutoIndex{
+
+    }
     class FileManager {
         +Collection[] collections
         sort()
+    }
+
+    class Fetcher{
+        +String SERVER_URL
+        +String DEBUG_MODE
+        +String permissionToken
+        fetch(permissionToken): Collection[]
     }
 
     class Setting{
@@ -123,6 +137,9 @@ classDiagram
     User "1" -- "0..*" Collection : manages
     User "1" -- "1" SearchHandler : performs
     SearchHandler "1" -- "0..*" Collection : returns
+
+    AutoIndex "1" -- "1" FileManager : manages
+    AutoIndex "1" -- "1" Fetcher : fetches
     FileManager "1" -- "0..*" Collection : syncs
 ```
 
