@@ -21,8 +21,9 @@ export type PathManager = {
 }
 
 export type Fetcher = {
-	SERVER_URL: string,
 	DEBUG_MODE: boolean,
+	SERVER_URL: string,
+	QUERY_METHOD: 'nginx' | 'server'
 	permissionToken: string,
 	fetchCollection: (path: Path) => Promise<Autoindex_Raw[]>,
 }

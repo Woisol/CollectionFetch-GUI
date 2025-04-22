@@ -108,17 +108,17 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 							)
 						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
 				</TableBody>
-				<div className="mt-4 flex justify-center">
-					<Pagination>
-						<PaginationContent>
-							<PaginationItem>
-								<PaginationPrevious href="#" />
-							</PaginationItem>
-							{table.getPageCount()}
-						</PaginationContent>
-					</Pagination>
-				</div>
 			</Table>
+			<div className="mt-4 flex justify-center">
+				<Pagination>
+					<PaginationContent>
+						<PaginationItem>
+							<PaginationPrevious href="#" />
+						</PaginationItem>
+						{table.getPageCount()}
+					</PaginationContent>
+				</Pagination>
+			</div>
 		</div>
 	)
 }

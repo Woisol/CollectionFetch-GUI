@@ -43,6 +43,9 @@ export default function usePathManager() {
 	}
 	const prev = () => {
 		setPaths(pathColect.slice(0, -1))
+		fetcher.fetchCollection(pathColect.slice(0, -1).map(path => path.cur)).then((res) => {
+			setIndexes(res)
+		})
 	}
 	const set = (paths: Path) => {
 		pathColect = paths.slice(0, -1).map((path, index) => { return { cur: path, collect: pathColect?.[index].cur === path ? pathColect?.[index].collect : [] } })

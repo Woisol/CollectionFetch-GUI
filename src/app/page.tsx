@@ -17,7 +17,7 @@ export default function Home() {
   const pathManager = usePathManager()
   useEffect(() => {
     const { next } = pathManager
-    next('/')
+    next('')
   }, [])
   return (
     <main className="">

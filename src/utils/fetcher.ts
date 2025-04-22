@@ -31,17 +31,29 @@ export const testIndex: Autoindex_Raw[] = [
 ]
 
 export const fetcher: Fetcher = {
-	SERVER_URL: 'http://localhost:3000',
-	DEBUG_MODE: true,
+	DEBUG_MODE: false,
+	SERVER_URL: 'http://woisol-pc:80',
+	QUERY_METHOD: 'nginx',
 	permissionToken: '',
 	fetchCollection: async (path: Path) => {
 		// @todo use testHTML instead
 		if (fetcher.DEBUG_MODE) return decodeAutoindex(testHTML)
-		const res = await fetch(`${fetcher.SERVER_URL}/api/collection`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ path: `/${path.join('/')}`, permissionToken: fetcher.permissionToken })
-		})
+		let res
+		switch (fetcher.QUERY_METHOD) {
+			case 'nginx': res = await fetch(`${fetcher.SERVER_URL}/files/${path.join('/')}`, { mode: 'cors' }); break
+			case 'server':
+				res = await fetch(`${fetcher.SERVER_URL}/api/collect/`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ path: `/${path.join('/')}`, permissionToken: fetcher.permissionToken })
+				})
+				break
+		}
+		// @todo ？默认怎么是上面的cors？
+		if (res.type === 'opaqueredirect') {
+			window.location.href = res.url
+			return []
+		}
 		return decodeAutoindex(await res.text())
 	}
 
