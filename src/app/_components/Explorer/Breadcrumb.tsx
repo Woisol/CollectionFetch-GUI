@@ -5,11 +5,12 @@ import { Slash } from "lucide-react";
 
 interface breadcrumbProps{
 	paths: string[],
-	dropdown: string[][]
+	dropdown: string[][],
+	className?: string,
 }
-export default function Breadcrumb( {paths,dropdown}:breadcrumbProps) {
+export default function Breadcrumb( {paths,dropdown,className}:breadcrumbProps) {
 	return (
-		<BreadcrumbShadcn>
+		<BreadcrumbShadcn className={className} >
 			<BreadcrumbList>
 				{paths.map((path,index) =>
 					<BreadcrumbItem key={index}>

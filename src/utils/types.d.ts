@@ -4,3 +4,10 @@ export type Autoindex_Raw = {
 	size: string,
 	modifiedAt: Date,
 }
+export type Autoindex = {
+	name: string,
+	href: string,
+	size: string,
+	modifiedAt: string,
+	children: Autoindex[]
+}
