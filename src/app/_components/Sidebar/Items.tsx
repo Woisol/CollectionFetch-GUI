@@ -20,7 +20,7 @@ export default function Items({ title, items }: SectionProps) {
       <ul>
         {items.map((item, index) => (
           <li key={index}>
-            <a className="text-gray-500 transition-colors" onClick={() => { pathManager.set(item.url.replace(/^\//, '').split('/')) }}>
+            <a className="text-gray-500 transition-colors" onClick={() => { pathManager.set(item.url.split('/')) }}>
               {item.icon ? React.cloneElement(item.icon as React.ReactElement, {
                 className: "w-4 h-4 mr-1 inline-block align-middle"
               }) :

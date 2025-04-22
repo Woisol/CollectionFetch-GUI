@@ -3,7 +3,6 @@ import Breadcrumb from "./Breadcrumb";
 import ExplorerTable from "./Table";
 import { useContext } from "react";
 import { PathManagerContext } from "@/app/page";
-import { testIndex } from "@/utils/fetcher";
 import usePathManager from "@/utils/usePathManager";
 
 export default function Explorer() {

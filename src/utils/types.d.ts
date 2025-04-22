@@ -2,7 +2,7 @@ export type Autoindex_Raw = {
 	name: string,
 	href: string,
 	size: string,
-	modifiedAt: Date,
+	modifiedAt?: Date,
 }
 export type Indexes = Autoindex_Raw[]
 

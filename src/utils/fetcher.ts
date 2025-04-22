@@ -1,3 +1,4 @@
+import { testHTML } from "./constant_test"
 import { decodeAutoindex } from "./decode"
 import { Autoindex_Raw, Fetcher, Path } from "./types"
 
@@ -35,7 +36,7 @@ export const fetcher: Fetcher = {
 	permissionToken: '',
 	fetchCollection: async (path: Path) => {
 		// @todo use testHTML instead
-		if (fetcher.DEBUG_MODE) return testIndex
+		if (fetcher.DEBUG_MODE) return decodeAutoindex(testHTML)
 		const res = await fetch(`${fetcher.SERVER_URL}/api/collection`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },

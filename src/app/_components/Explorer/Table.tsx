@@ -95,7 +95,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 								<TableRow key={row.id} onClick={() => {
 									row.original.href === '../' ?
 										pathManager.prev() :
-										pathManager.next(row.original.href.replace(/^\//, ''))
+										pathManager.next(row.original.href)
 								}}>
 									{row.getVisibleCells().map(cell => {
 										return (
