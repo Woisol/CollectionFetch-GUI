@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { fetcher } from "./fetcher";
-import { PathManager, PathColect, Autoindex_Raw } from "./types";
+import { PathManager, PathColect, Autoindex_Raw, Path } from "./types";
 
 // !还是不习惯用class……只有一个实例应该还是对象更合适？
 // export const pathManager: PathManager = {
@@ -30,19 +30,26 @@ import { PathManager, PathColect, Autoindex_Raw } from "./types";
 
 export default function usePathManager() {
 	// @todo 完善从localStorage初始化逻辑
-	const [paths, setPaths] = useState<PathColect[]>([])
+	const [pathColect, setPaths] = useState<PathColect[]>([])
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])
 	const _push = (newPath: string, autoindex: Autoindex_Raw[]) => {
-		setPaths([...paths, { cur: newPath, collect: autoindex.map(item => item.name) }])
+		setPaths([...pathColect, { cur: newPath, collect: autoindex.map(item => item.name) }])
 		setIndexes(autoindex)
 	}
 	const next = (path: string) => {
-		fetcher.fetchCollection([...paths.map(path => path.cur), path]).then((res) => {
+		fetcher.fetchCollection([...pathColect.map(path => path.cur), path]).then((res) => {
 			_push(path, res)
 		})
 	}
 	const prev = () => {
-		setPaths(paths.slice(0, -1))
+		setPaths(pathColect.slice(0, -1))
 	}
-	return { paths, indexes, _push, next, prev }
+	const set = (paths: Path) => {
+		setPaths(paths.map((path, index) => { return { cur: path, collect: pathColect?.[index].collect } }))
+		fetcher.fetchCollection(paths).then((res) => {
+			setIndexes(res)
+		})
+
+	}
+	return { pathColect, indexes, _push, next, prev, set }
 }

@@ -1,5 +1,6 @@
+import { PathManagerContext } from "@/app/page";
 import { Link } from "lucide-react";
-import React from "react";
+import React, { useContext } from "react";
 
 export type SectionChild = {
 	content: string;
@@ -11,6 +12,7 @@ interface SectionProps {
   items: SectionChild[];
 }
 export default function Items({ title, items }: SectionProps) {
+  const pathManager = useContext(PathManagerContext)
   return (
     <section className="w-full my-5 align-middle">
 		  <h2>{title}</h2>
@@ -18,7 +20,7 @@ export default function Items({ title, items }: SectionProps) {
       <ul>
         {items.map((item, index) => (
           <li key={index}>
-            <a href={item.url} className="text-gray-500 transition-colors">
+            <a className="text-gray-500 transition-colors" onClick={() => { pathManager.set(item.url.replace(/^\//, '').split('/')) }}>
               {item.icon ? React.cloneElement(item.icon as React.ReactElement, {
                 className: "w-4 h-4 mr-1 inline-block align-middle"
               }) :

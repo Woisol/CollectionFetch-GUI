@@ -10,7 +10,7 @@ export default function Explorer() {
 	const pathManager = useContext(PathManagerContext)
 	return (
 		<div className="size-full p-3 bg-white rounded-2xl overflow-hidden">
-			<Breadcrumb className="p-3 bg-" paths={pathManager.paths.map(paths => paths.cur)} dropdown={pathManager.paths.map(paths => paths.collect)} />
+			<Breadcrumb className="p-3 bg-" paths={pathManager.pathColect.map(paths => paths.cur)} dropdown={pathManager.pathColect.map(paths => paths.collect.filter(c => c !== '../'))} />
 			<ExplorerTable data={pathManager.indexes} className={"mt2 rounded-default"} />
 		</div>
 	);
