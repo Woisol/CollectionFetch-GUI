@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { fetcher } from "@/utils/fetcher";
 import { Dir } from "@/utils/types";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { Slash } from "lucide-react";
 import { useContext, useState } from "react";
 
 interface breadcrumbProps{
@@ -23,10 +22,10 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 	}
 	return (
 		<BreadcrumbShadcn className={cn('select-none', className)} >
-			<BreadcrumbList>
+			<BreadcrumbList className="gap-1 sm:gap-1">
 				{paths.map((path, index_path) =>
 					// @todo 维护一下Home的问题……
-					<BreadcrumbItem key={index_path}>
+					<BreadcrumbItem key={index_path} className="gap-1">
 						{/* <></> */}
 						{/* {dropdown?.[index_path] && dropdown?.[index_path].length > 0 ? */}
 						<HoverCard openDelay={100}>
@@ -36,9 +35,10 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 								onMouseEnter={() => { if (index_path === 0) { setDropdown([]); return; } handleColectionFetch(paths.slice(0, index_path + 1)) }}
 							// onMouseLeave={() => { setDropdown([]) }}
 							>
-								{path.name}
+								{path.name.replaceAll('/', '')}
 							</HoverCardTrigger>
 							{dropdown.length > 0 &&
+							// @todo 容易出现不同切换的串台问题……
 								<HoverCardContent align="start" className="max-h-[min(80vh,400px)] overflow-y-auto">
 									{dropdown.map((item, index_dropdown) =>
 										<a key={index_dropdown} className="block px-1 py-0.5 rounded-default hover:text-primary-dark! transition-colors" onClick={() => {
@@ -46,7 +46,7 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 											pathManager.set(newPaths)
 											handleColectionFetch(newPaths)
 										}}>
-											{item.name.replace(/\/$/, '')}
+											{item.name.replaceAll('/', '')}
 										</a>
 									)}
 								</HoverCardContent>
@@ -64,7 +64,7 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 function Sep() {
 	return (
 		<BreadcrumbSeparator>
-			<Slash/>
+			/
 		</BreadcrumbSeparator>
 	)
 }

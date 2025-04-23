@@ -7,17 +7,17 @@ import { decodeDir } from "@/utils/decode";
 const pinned : SectionChild[] = [
   { dir: [{ name: "Home", href: "" }], icon: <Home /> },
   { dir: decodeDir('/System/'), icon: "" },
-  { dir: decodeDir('/Data'), icon: "" },
+  { dir: decodeDir('/Data/'), icon: "" },
 ]
 const recent: SectionChild[] = [
   { dir: [{ name: "Home", href: "" }], icon: <Home /> },
   { dir: decodeDir('/System/'), icon: "" },
-  { dir: decodeDir('/Data'), icon: "" },
+  { dir: decodeDir('/Data/'), icon: "" },
 ]
 const recommend: SectionChild[] = [
   { dir: [{ name: "Home", href: "" }], icon: <Home /> },
   { dir: decodeDir('/System/'), icon: "" },
-  { dir: decodeDir('/Data'), icon: "" },
+  { dir: decodeDir('/Data/'), icon: "" },
 ]
 
 export default function Sidebar() {

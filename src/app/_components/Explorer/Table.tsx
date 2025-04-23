@@ -9,6 +9,7 @@ import { fetcher } from "@/utils/fetcher"
 import { Autoindex_Raw, Indexes } from "@/utils/types"
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, Row, TableOptions, useReactTable } from '@tanstack/react-table'
 import { useContext, useState } from "react"
+import { File, FileArchive, FolderClosed, Slash } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
 	data: Indexes,
@@ -91,7 +92,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 	}
 	return (
 		// !在Table上border和overflow-hidden冲突()
-		<div className={cn("w-full h-[830px] border-1 border-gray-300 overflow-hidden select-none flex flex-col", className)} >
+		<div className={cn("w-full h-[830px] pb-4 border-1 border-gray-300 overflow-hidden select-none flex flex-col", className)} >
 			<Table className="flex-1" >
 				<TableHeader className="bg-background">
 					{table.getHeaderGroups().map(headerGroup => {

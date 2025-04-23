@@ -51,10 +51,12 @@ export function formatDate(date?: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
 			.replace('%b', mon(date.getMonth()))
 }
 export function decodeDir(dir: string): Dir[] {
+	// !以/分隔但是保留/！
+	// const dirs = dir.split(/(?<=\/)/g).filter((item) => item !== '/')
 	const dirs = dir.split('/').filter((item) => item !== '')
 	const res: Dir[] = []
 	for (var i in dirs) {
-		res.push({ name: dirs[i], href: encodeURIComponent(dirs[i]) })
+		res.push({ name: dirs[i], href: encodeURIComponent(dirs[i]) + '/' })
 	}
 	return res
 }
