@@ -140,11 +140,12 @@ a{
 }
 
 .btn-primary{
-  @apply bg-primary hover:bg-primary-light active:bg-primary-dark transition-[background-color];
+  @apply hover:text-black bg-primary hover:bg-primary-light active:bg-primary-dark transition-[background-color];
 }
 .btn-gray{
   @apply bg-gray-400 hover:bg-gray-300 active:bg-gray-500 transition-[background-color];
 }
+
 .btn-scale{
   @apply hover:scale-110 active:scale-90 transition-all;
 }
@@ -153,4 +154,8 @@ a{
 }
 .btn-scale-xs{
   @apply hover:scale-[1.02] active:scale-[0.98] transition-all;
+}
+
+.btn-offset{
+  @apply active:translate-y-0.5 transition-all;
 }

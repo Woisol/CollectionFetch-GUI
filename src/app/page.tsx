@@ -16,8 +16,11 @@ export const PathManagerContext = createContext<ReturnType<typeof usePathManager
 export default function Home() {
   const pathManager = usePathManager()
   useEffect(() => {
-    const { next } = pathManager
-    next('')
+    // const { next } = pathManager
+    // next()
+    pathManager.set([
+      { name: 'Home', href: '' },
+    ])
   }, [])
   return (
     <main className="">

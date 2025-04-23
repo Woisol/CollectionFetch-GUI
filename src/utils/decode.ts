@@ -10,7 +10,7 @@ export function decodeAutoindex(html: string, index_only?: boolean): (Autoindex_
 		if (bodylines[i].search(/<script>/) !== -1)
 			break
 		if (index_only) {
-			const m = /\s*<a href="(.+?)">(.+?)<\/a>/.exec(bodylines[i])
+			const m = /\s*<a href="(.+?\/)">(.+?\/)<\/a>/.exec(bodylines[i])
 			if (m) {
 				const href: string = m[1]
 				const name: string = m[2]
@@ -49,4 +49,12 @@ export function formatDate(date?: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
 			.replace('%M', pad(date.getMinutes()))
 			.replace('%S', pad(date.getSeconds()))
 			.replace('%b', mon(date.getMonth()))
+}
+export function decodeDir(dir: string): Dir[] {
+	const dirs = dir.split('/').filter((item) => item !== '')
+	const res: Dir[] = []
+	for (var i in dirs) {
+		res.push({ name: dirs[i], href: encodeURIComponent(dirs[i]) })
+	}
+	return res
 }

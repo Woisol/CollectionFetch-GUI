@@ -1,10 +1,10 @@
 import { PathManagerContext } from "@/app/page";
+import { Dir } from "@/utils/types";
 import { Link } from "lucide-react";
 import React, { useContext } from "react";
 
 export type SectionChild = {
-	content: string;
-	url: string;
+  dir: Dir[]
 	icon?: React.ReactNode;
 }
 interface SectionProps {
@@ -20,12 +20,14 @@ export default function Items({ title, items }: SectionProps) {
       <ul>
         {items.map((item, index) => (
           <li key={index}>
-            <a className="text-gray-500 transition-colors" onClick={() => { pathManager.set(item.url.split('/')) }}>
+            <a className="text-gray-500 transition-colors" onClick={() => {
+              pathManager.set(item.dir)
+            }}>
               {item.icon ? React.cloneElement(item.icon as React.ReactElement, {
                 className: "w-4 h-4 mr-1 inline-block align-middle"
               }) :
               <Link className="w-4 h-4 mr-1 inline-block align-middle"/>}
-              {item.content}
+              {item.dir.map(dir => dir.name).join('/')}
             </a>
           </li>
         ))}

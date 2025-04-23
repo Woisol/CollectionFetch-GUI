@@ -1,22 +1,23 @@
 import { Home } from "lucide-react";
 import Items, { SectionChild } from "./Items";
 import Section from "./Section";
+import { decodeDir } from "@/utils/decode";
 
 // !通过本地文件定义？
 const pinned : SectionChild[] = [
-  { content: "Home", url: "", icon: <Home /> },
-  { content: "About", url: "about", icon: "" },
-  { content: "Contact", url: "contact", icon: "" },
+  { dir: [{ name: "Home", href: "" }], icon: <Home /> },
+  { dir: decodeDir('/System/'), icon: "" },
+  { dir: decodeDir('/Data'), icon: "" },
 ]
 const recent: SectionChild[] = [
-  { content: "Home", url: "", icon: <Home /> },
-  { content: "About", url: "about", icon: "" },
-  { content: "Contact", url: "contact", icon: "" },
+  { dir: [{ name: "Home", href: "" }], icon: <Home /> },
+  { dir: decodeDir('/System/'), icon: "" },
+  { dir: decodeDir('/Data'), icon: "" },
 ]
 const recommend: SectionChild[] = [
-  { content: "Home", url: "", icon: <Home /> },
-  { content: "About", url: "about", icon: "" },
-  { content: "Contact", url: "contact", icon: "" },
+  { dir: [{ name: "Home", href: "" }], icon: <Home /> },
+  { dir: decodeDir('/System/'), icon: "" },
+  { dir: decodeDir('/Data'), icon: "" },
 ]
 
 export default function Sidebar() {
