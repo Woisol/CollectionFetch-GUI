@@ -5,7 +5,7 @@ import Sidebar from "./_components/Sidebar";
 import Explorer from "./_components/Explorer";
 import { useContext, useEffect } from "react";
 import { createContext } from "react";
-import { Path, PathColect, PathManager } from "@/utils/types";
+import { Path, Dir, PathManager } from "@/utils/types";
 import path from "path";
 import usePathManager from "@/utils/usePathManager";
 

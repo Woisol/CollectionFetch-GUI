@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { fetcher } from "./fetcher";
-import { PathManager, PathColect, Autoindex_Raw, Path } from "./types";
+import { PathManager, Dir, Autoindex_Raw, Path } from "./types";
 
 // !还是不习惯用class……只有一个实例应该还是对象更合适？
 // export const pathManager: PathManager = {
@@ -30,29 +30,28 @@ import { PathManager, PathColect, Autoindex_Raw, Path } from "./types";
 
 export default function usePathManager() {
 	// @todo 完善从localStorage初始化逻辑
-	let [pathColect, setPathColect] = useState<PathColect[]>([])
+	let [dir, setDir] = useState<Dir[]>([])
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])
-	const _push = (newPath: string, autoindex: Autoindex_Raw[]) => {
-		setPathColect([...pathColect, { cur: newPath, collect: indexes.map(item => item.name) }])
+	const _push = (newDir: Dir, autoindex: Autoindex_Raw[]) => {
+		setDir([...dir, newDir])
 		setIndexes(autoindex)
 	}
-	const next = (path: string) => {
-		fetcher.fetchCollection([...pathColect.map(path => path.cur), path]).then((res) => {
-			_push(path, res)
+	const next = (path: Dir) => {
+		fetcher.fetchCollection([...dir.map(path => path.href), path.href]).then((res) => {
+			_push(path, res as Autoindex_Raw[])
 		})
 	}
 	const prev = () => {
-		setPathColect(pathColect.slice(0, -1))
-		fetcher.fetchCollection(pathColect.slice(0, -1).map(path => path.cur)).then((res) => {
-			setIndexes(res)
+		setDir(dir.slice(0, -1))
+		fetcher.fetchCollection(dir.slice(0, -1).map(path => path.href)).then((res) => {
+			setIndexes(res as Autoindex_Raw[])
 		})
 	}
-	const set = (paths: Path) => {
-		pathColect = paths.slice(0, -1).map((path, index) => { return { cur: path, collect: pathColect?.[index].cur === path ? pathColect?.[index].collect : [] } })
-		fetcher.fetchCollection(paths).then((res) => {
-			setPathColect([...pathColect, { cur: paths[paths.length - 1], collect: res.map(item => item.name) }])
-			setIndexes(res)
+	const set = (dirs: Dir[]) => {
+		fetcher.fetchCollection(dirs.map(path => path.href)).then((res) => {
+			setDir(dirs)
+			setIndexes(res as Autoindex_Raw[])
 		})
 	}
-	return { pathColect, indexes, _push, next, prev, set }
+	return { dir, indexes, _push, next, prev, set }
 }

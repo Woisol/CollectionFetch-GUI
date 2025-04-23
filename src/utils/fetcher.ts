@@ -1,6 +1,6 @@
 import { toast } from "sonner"
 import { testHTML } from "./constant_test"
-import { decodeAutoindex } from "./decode"
+import { decodeAutoindex, decodeAutoindex_IndexOnly } from "./decode"
 import { Autoindex_Raw, Fetcher, Path } from "./types"
 
 export const fetcher: Fetcher = {
@@ -8,7 +8,7 @@ export const fetcher: Fetcher = {
 	SERVER_URL: 'http://woisol-pc',
 	QUERY_METHOD: 'nginx',
 	permissionToken: '',
-	fetchCollection: async (path: Path) => {
+	fetchCollection: async (path, index_only) => {
 		// @todo use testHTML instead
 		if (fetcher.DEBUG_MODE) return decodeAutoindex(testHTML)
 		let res
@@ -28,7 +28,7 @@ export const fetcher: Fetcher = {
 			window.location.href = res.url
 			return []
 		}
-		return decodeAutoindex(await res.text())
+		return decodeAutoindex(await res!.text(), index_only)
 	}
 
 }

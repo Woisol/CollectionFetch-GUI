@@ -1,34 +1,42 @@
 import {JSDOM} from 'jsdom'
-import { Autoindex_Raw } from './types'
+import { Autoindex_Raw, Dir } from './types'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-export function decodeAutoindex(html: string): Autoindex_Raw[] {
-	const res: Autoindex_Raw[] = []
+export function decodeAutoindex(html: string, index_only?: boolean): (Autoindex_Raw | Dir)[] {
+	const res: (Autoindex_Raw | Dir)[] = []
 
 	const dom = new JSDOM(html)
 	const bodylines = dom.window.document.body.innerHTML.split('\n')
 	for (var i in bodylines) {
 		if (bodylines[i].search(/<script>/) !== -1)
 			break
-		const m = /\s*<a href="(.+?)">(.+?)<\/a>\s*(\S+)\s+(\S+)\s+(\S+)\s*/.exec(bodylines[i])
-		if (m) {
-			const href: string = m[1]
-			const name: string = m[2]
-			const size: string = m[5]
-			const _parse = new Date(m[3] + ' ' + m[4])
-			const modifiedAt: Date = _parse === undefined? new Date(0):_parse // 解析错误则1970/1/1 00:00:00
-			res.push({ name,href, modifiedAt,size})
-		} else {
+		if (index_only) {
 			const m = /\s*<a href="(.+?)">(.+?)<\/a>/.exec(bodylines[i])
 			if (m) {
 				const href: string = m[1]
 				const name: string = m[2]
-				res.push({ name, href, size: '' })
+				res.push({ name, href })
+			}
+		} else {
+			const m = /\s*<a href="(.+?)">(.+?)<\/a>\s*(\S+)\s+(\S+)\s+(\S+)\s*/.exec(bodylines[i])
+			if (m) {
+				const href: string = m[1]
+				const name: string = m[2]
+				const size: string = m[5]
+				const _parse = new Date(m[3] + ' ' + m[4])
+				const modifiedAt: Date = _parse === undefined ? new Date(0) : _parse // 解析错误则1970/1/1 00:00:00
+				res.push({ name, href, modifiedAt, size })
+			} else {
+				const m = /\s*<a href="(.+?)">(.+?)<\/a>/.exec(bodylines[i])
+				if (m) {
+					const href: string = m[1]
+					const name: string = m[2]
+					res.push({ name, href, size: '' })
+				}
 			}
 		}
 	}
 	return res
 }
-
 export function formatDate(date?: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
 	if (date === undefined) return ''
 		const pad = function (s:number) { return s < 10 ? '0' + s : s }

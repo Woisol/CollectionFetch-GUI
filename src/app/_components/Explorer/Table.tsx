@@ -7,7 +7,7 @@ import { pathManager } from "@/utils/usePathManager"
 import { formatDate } from "@/utils/decode"
 import { fetcher } from "@/utils/fetcher"
 import { Autoindex_Raw, Indexes } from "@/utils/types"
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, TableOptions, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, Row, TableOptions, useReactTable } from '@tanstack/react-table'
 import { useContext, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
@@ -72,6 +72,11 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 			// }
 		},
 	})
+	function handleRowClick(row: Row<Autoindex_Raw>) {
+		row.original.href === '../' ?
+			pathManager.prev() :
+			pathManager.next({ name: row.original.name, href: row.original.href })
+	}
 	function PaginationPage({ index }: { index: number }) {
 		return (
 			<PaginationItem onClick={() => {
@@ -112,18 +117,12 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 					{table.getRowCount() ?
 						table.getRowModel().rows.map(row => {
 							return (
-								<TableRow key={row.id} onClick={() => {
-									row.original.href === '../' ?
-										pathManager.prev() :
-										pathManager.next(row.original.href)
-								}}>
-									{row.getVisibleCells().map(cell => {
-										return (
-											<TableCell key={cell.id}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
-											</TableCell>
-										)
-									})}
+								<TableRow key={row.id} onClick={() => { handleRowClick(row) }}>
+									{row.getVisibleCells().map(cell =>
+										<TableCell key={cell.id}>
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+										</TableCell>
+									)}
 								</TableRow>
 							)
 						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
