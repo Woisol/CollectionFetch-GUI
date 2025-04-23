@@ -38,6 +38,7 @@ export default function usePathManager() {
 	}
 	const next = (path: Dir) => {
 		fetcher.fetchCollection([...dir.map(path => path.href), path.href]).then((res) => {
+			if (!res) return;
 			_push(path, res as Autoindex_Raw[])
 		})
 	}

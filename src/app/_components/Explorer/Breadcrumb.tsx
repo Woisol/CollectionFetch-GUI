@@ -29,7 +29,7 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 					<BreadcrumbItem key={index_path}>
 						{/* <></> */}
 						{/* {dropdown?.[index_path] && dropdown?.[index_path].length > 0 ? */}
-						<HoverCard>
+						<HoverCard openDelay={100}>
 							<HoverCardTrigger className="h-6 px-2 rounded-full btn-primary btn-offset"
 								onClick={() => { pathManager.set(paths.slice(0, index_path + 1)) }}
 								// @todo 补丁……考虑优化
@@ -39,9 +39,9 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 								{path.name}
 							</HoverCardTrigger>
 							{dropdown.length > 0 &&
-								<HoverCardContent align="start" className="max-h-[min(100%,400px)] overflow-y-auto">
+								<HoverCardContent align="start" className="max-h-[min(80vh,400px)] overflow-y-auto">
 									{dropdown.map((item, index_dropdown) =>
-										<a key={index_dropdown} className="block px-3 py-1 " onClick={() => {
+										<a key={index_dropdown} className="block px-1 py-0.5 rounded-default hover:text-primary-dark! transition-colors" onClick={() => {
 											const newPaths = [...paths.slice(0, index_path), item]
 											pathManager.set(newPaths)
 											handleColectionFetch(newPaths)

@@ -25,5 +25,5 @@ export type Fetcher = {
 	SERVER_URL: string,
 	QUERY_METHOD: 'nginx' | 'server'
 	permissionToken: string,
-	fetchCollection: (path: Path, index_only?: boolean) => Promise<(Autoindex_Raw | Dir)[]>,
+	fetchCollection: (path: Path, index_only?: boolean) => Promise<(Autoindex_Raw | Dir)[] | undefined>,
 }
