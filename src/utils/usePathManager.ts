@@ -30,10 +30,10 @@ import { PathManager, PathColect, Autoindex_Raw, Path } from "./types";
 
 export default function usePathManager() {
 	// @todo 完善从localStorage初始化逻辑
-	let [pathColect, setPaths] = useState<PathColect[]>([])
+	let [pathColect, setPathColect] = useState<PathColect[]>([])
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])
 	const _push = (newPath: string, autoindex: Autoindex_Raw[]) => {
-		setPaths([...pathColect, { cur: newPath, collect: autoindex.map(item => item.name) }])
+		setPathColect([...pathColect, { cur: newPath, collect: indexes.map(item => item.name) }])
 		setIndexes(autoindex)
 	}
 	const next = (path: string) => {
@@ -42,18 +42,17 @@ export default function usePathManager() {
 		})
 	}
 	const prev = () => {
-		setPaths(pathColect.slice(0, -1))
+		setPathColect(pathColect.slice(0, -1))
 		fetcher.fetchCollection(pathColect.slice(0, -1).map(path => path.cur)).then((res) => {
 			setIndexes(res)
 		})
 	}
 	const set = (paths: Path) => {
 		pathColect = paths.slice(0, -1).map((path, index) => { return { cur: path, collect: pathColect?.[index].cur === path ? pathColect?.[index].collect : [] } })
-		// setPaths()
 		fetcher.fetchCollection(paths).then((res) => {
-			_push(paths[paths.length - 1], res)
+			setPathColect([...pathColect, { cur: paths[paths.length - 1], collect: res.map(item => item.name) }])
+			setIndexes(res)
 		})
-
 	}
 	return { pathColect, indexes, _push, next, prev, set }
 }

@@ -1,38 +1,11 @@
+import { toast } from "sonner"
 import { testHTML } from "./constant_test"
 import { decodeAutoindex } from "./decode"
 import { Autoindex_Raw, Fetcher, Path } from "./types"
 
-export const testIndex: Autoindex_Raw[] = [
-	{
-		name: '../',
-		href: '../',
-		size: '-',
-		modifiedAt: new Date()
-	},
-	{
-		name: 'base',
-		href: '/base',
-		size: '20M',
-		// !出现过完全不动却一直在更新数据的问题
-		modifiedAt: new Date()
-	},
-	{
-		name: 'Code',
-		href: '/Code',
-		size: '10M',
-		modifiedAt: new Date(),
-	},
-	{
-		name: 'Frontend',
-		href: '/Frontend',
-		size: '5M',
-		modifiedAt: new Date(),
-	}
-]
-
 export const fetcher: Fetcher = {
 	DEBUG_MODE: false,
-	SERVER_URL: 'http://woisol-pc:80',
+	SERVER_URL: 'http://woisol-pc',
 	QUERY_METHOD: 'nginx',
 	permissionToken: '',
 	fetchCollection: async (path: Path) => {
@@ -40,7 +13,8 @@ export const fetcher: Fetcher = {
 		if (fetcher.DEBUG_MODE) return decodeAutoindex(testHTML)
 		let res
 		switch (fetcher.QUERY_METHOD) {
-			case 'nginx': res = await fetch(`${fetcher.SERVER_URL}/files/${path.join('/')}`, { mode: 'cors' }); break
+			case 'nginx': res = await fetch(`${fetcher.SERVER_URL}/files/${path.join('/')}`, { mode: 'cors' })
+				.catch(() => { toast(`Network Error：\n无法获取路径${path.join('/')}的数据`, {}) }); break
 			case 'server':
 				res = await fetch(`${fetcher.SERVER_URL}/api/collect/`, {
 					method: 'POST',

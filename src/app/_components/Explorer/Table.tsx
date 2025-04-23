@@ -1,6 +1,6 @@
 'use client'
 import { PathManagerContext } from "@/app/page"
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious } from "@/components/ui/pagination"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { pathManager } from "@/utils/usePathManager"
@@ -8,7 +8,7 @@ import { formatDate } from "@/utils/decode"
 import { fetcher } from "@/utils/fetcher"
 import { Autoindex_Raw, Indexes } from "@/utils/types"
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, TableOptions, useReactTable } from '@tanstack/react-table'
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
 	data: Indexes,
@@ -28,7 +28,7 @@ const defaultColumn: Partial<ColumnDef<Autoindex_Raw>> = {
 	enableResizing: true,
 	enableSorting: true,
 	enableHiding: true,
-	minSize: 60
+	minSize: 60,
 }
 const columns: ColumnDef<Autoindex_Raw, keyof Autoindex_Raw>[] = [
 	{
@@ -51,23 +51,43 @@ const columns: ColumnDef<Autoindex_Raw, keyof Autoindex_Raw>[] = [
 
 export default function ExplorerTable<TData, TValue>({ data, className }: DataTableProps<TData, TValue>) {
 	const pathManager = useContext(PathManagerContext)
+	const [pagination, setPagination] = useState({
+		pageIndex: 0,
+		pageSize: 20
+	})
 	const table = useReactTable({
 		data, columns,
 		getCoreRowModel: getCoreRowModel(),
 		defaultColumn,
 		getPaginationRowModel: getPaginationRowModel(),
 		enableSorting: true,
+		onPaginationChange: setPagination,
 		state: {
-			pagination: {
-				pageIndex: 0,
-				pageSize: 10
-			}
+			pagination,
+
+			// !仅限于设置初始值……
+			// pagination: {
+			// 	pageIndex: 0,
+			// 	pageSize: 20
+			// }
 		},
 	})
+	function PaginationPage({ index }: { index: number }) {
+		return (
+			<PaginationItem onClick={() => {
+				table.setPageIndex(index)
+				// console.log(table.getState().pagination.pageIndex)
+			}}>
+				<PaginationLink isActive={table.getState().pagination.pageIndex === index}>
+					{index + 1}
+				</PaginationLink>
+			</PaginationItem>
+		)
+	}
 	return (
 		// !在Table上border和overflow-hidden冲突()
-		<div className={cn("w-full h-fit border-1 border-gray-300 overflow-hidden select-none", className)} >
-			<Table >
+		<div className={cn("w-full h-[830px] border-1 border-gray-300 overflow-hidden select-none flex flex-col", className)} >
+			<Table className="flex-1" >
 				<TableHeader className="bg-background">
 					{table.getHeaderGroups().map(headerGroup => {
 						return (
@@ -110,13 +130,17 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 				</TableBody>
 			</Table>
 			{/* @todo 分页还没做呢…… */}
-			<div className="mt-4 flex justify-center">
+			{/* // ! 所以原来m-auto要flex上下文才能生效的？？？ */}
+			<div className="block w-fit h-9 mt-auto mx-auto">
 				<Pagination>
 					<PaginationContent>
-						<PaginationItem>
-							<PaginationPrevious href="#" />
+						<PaginationItem >
+							<PaginationPrevious className={`${!table.getCanPreviousPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (!table.getCanPreviousPage()) return; table.previousPage() }} />
 						</PaginationItem>
-						{table.getPageCount()}
+						{Array.from({ length: table.getPageCount() }).map((_, index) => <PaginationPage key={index} index={index} />)}
+						<PaginationItem>
+							<PaginationNext className={`${!table.getCanNextPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (!table.getCanNextPage()) return; table.nextPage() }} />
+						</PaginationItem>
 					</PaginationContent>
 				</Pagination>
 			</div>
