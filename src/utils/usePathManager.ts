@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { fetcher } from "./fetcher";
-import { PathManager, Dir, Autoindex_Raw, Path } from "./types";
+import { Dir, Autoindex_Raw } from "./types";
 
 // !还是不习惯用class……只有一个实例应该还是对象更合适？
 // export const pathManager: PathManager = {
@@ -38,6 +38,10 @@ export default function usePathManager() {
 		curDir = newDir;
 		setDir(newDir)
 	}
+	// const handleDirChange = (newDir: Dir[]) => {
+	// 	curDir = newDir;
+	// 	setDir(newDir)
+	// }
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])
 	const _push = (newDir: Dir, autoindex: Autoindex_Raw[]) => {
 		handleDirChange([...dir, newDir])
@@ -67,7 +71,7 @@ export default function usePathManager() {
 			setIndexes(res as Autoindex_Raw[])
 		})
 	}
-	return { dir, indexes, _push, next, prev, set }
+	return { dir, indexes, _push, next, prev, set } as { dir: Dir[], indexes: Autoindex_Raw[], _push: (newDir: Dir, autoindex: Autoindex_Raw[]) => void, next: (path: Dir) => void, prev: () => void, set: (dirs: Dir[]) => void }
 }
 // const getContent = (name: string) => {
 // 	fetcher.fetchFile([...dir.map(path => path.href), name]).then((res) => {

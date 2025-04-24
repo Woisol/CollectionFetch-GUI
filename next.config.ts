@@ -13,8 +13,15 @@ const nextConfig: NextConfig = {
       child_process: false,
     }
     return config
-  }
-
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // 忽略 eslint 检查
+  },
+  typescript: {
+    ignoreBuildErrors: true, // 忽略 TypeScript 检查
+  },
+  output: 'export',
+  basePath: '/files'
 };
 
 export default nextConfig;

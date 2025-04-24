@@ -1,9 +1,7 @@
-import { Autoindex_Data } from "@/utils/types";
 import Breadcrumb from "./Breadcrumb";
 import ExplorerTable from "./Table";
 import { useContext } from "react";
 import { PathManagerContext } from "@/app/page";
-import usePathManager from "@/utils/usePathManager";
 
 export default function Explorer() {
 	const pathManager = useContext(PathManagerContext)

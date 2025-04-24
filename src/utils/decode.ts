@@ -1,6 +1,5 @@
 import {JSDOM} from 'jsdom'
 import { Autoindex_Raw, Dir, FileType } from './types'
-import { toast } from 'sonner'
 import { fetcher } from './fetcher'
 import { curDir } from './usePathManager'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -12,7 +11,7 @@ export async function decodeAutoindex(html: string, index_only?: boolean): Promi
 	const bodylines = dom.window.document.body.innerHTML.split('\n')
 	let readme: string | undefined
 	let URLContent: string | undefined;
-	for (var i in bodylines) {
+	for (let i in bodylines) {
 		if (bodylines[i].search(/<script>/) !== -1)
 			break
 		if (index_only) {
@@ -68,7 +67,7 @@ export async function decodeAutoindex(html: string, index_only?: boolean): Promi
 }
 export function formatDate(date?: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {
 	if (date === undefined) return ''
-		const pad = function (s:number) { return s < 10 ? '0' + s : s }
+	const pad = function (s: number): string { return s < 10 ? '0' + s : s.toString() }
 		const mon = function (m:number) { return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m] }
 		return DATETIME_FORMAT
 			.replace('%Y', date.getFullYear().toString())
@@ -84,7 +83,7 @@ export function decodeDir(dir: string): Dir[] {
 	// const dirs = dir.split(/(?<=\/)/g).filter((item) => item !== '/')
 	const dirs = dir.split('/').filter((item) => item !== '')
 	const res: Dir[] = []
-	for (var i in dirs) {
+	for (let i in dirs) {
 		res.push({ name: dirs[i], href: encodeURIComponent(dirs[i]) + '/' })
 	}
 	return res

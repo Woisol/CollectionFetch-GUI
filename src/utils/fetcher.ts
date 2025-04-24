@@ -1,11 +1,11 @@
 import { toast } from "sonner"
 import { testHTML } from "./constant_test"
-import { decodeAutoindex, decodeAutoindex_IndexOnly } from "./decode"
-import { Autoindex_Raw, Fetcher, Path } from "./types"
+import { decodeAutoindex } from "./decode"
+import { Fetcher } from "./types"
 
 export const fetcher: Fetcher = {
 	DEBUG_MODE: false,
-	SERVER_URL: 'http://woisol-pc',
+	SERVER_URL: 'http://woisol-pc/_files',
 	QUERY_METHOD: 'nginx',
 	permissionToken: '',
 	fetchCollection: async (path, index_only) => {
@@ -14,10 +14,10 @@ export const fetcher: Fetcher = {
 		const isURL = path[path.length - 1].startsWith('http')
 		const isDir = path.length === 0 || path[path.length - 1].endsWith('/') || path[path.length - 1] === ''
 		if (isURL) { window.open(path[path.length - 1]); return; }
-		if (!isDir) { window.open(`${fetcher.SERVER_URL}/files/${path.join('/')}`); return; }
+		if (!isDir) { window.open(`${fetcher.SERVER_URL}/${path.join('/')}`); return; }
 		let res
 		switch (fetcher.QUERY_METHOD) {
-			case 'nginx': res = await fetch(`${fetcher.SERVER_URL}/files/${path.join('/')}`, { mode: 'cors' })
+			case 'nginx': res = await fetch(`${fetcher.SERVER_URL}/${path.join('/')}`, { mode: 'cors' })
 				.catch(() => { toast.error(`Network Error：\n无法获取路径${path.join('/')}的数据`, {}) }); break
 			case 'server':
 				res = await fetch(`${fetcher.SERVER_URL}/api/collect/`, {
@@ -35,7 +35,7 @@ export const fetcher: Fetcher = {
 		return decodeAutoindex(await res!.text(), index_only)
 	},
 	fetchFile: async (path) => {
-		const res = await fetch(`${fetcher.SERVER_URL}/files/${path.join('/')}`, { mode: 'cors' })
+		const res = await fetch(`${fetcher.SERVER_URL}/${path.join('/')}`, { mode: 'cors' })
 			.catch(() => { toast.error(`Network Error：\n无法获取路径${path.join('/')}的数据`, {}) })
 		return await res?.text() ?? 'Failed to Fetch' + path.join('/')
 	}

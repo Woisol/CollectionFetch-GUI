@@ -1,3 +1,4 @@
+// 'use client' // ! 和export metadata冲突
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

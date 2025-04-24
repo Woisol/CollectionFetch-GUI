@@ -1,23 +1,22 @@
 import { PathManagerContext } from "@/app/page";
 import { Breadcrumb as BreadcrumbShadcn, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { fetcher } from "@/utils/fetcher";
 import { Dir } from "@/utils/types";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useContext, useState } from "react";
 
-interface breadcrumbProps{
+interface BreadcrumbProps {
 	paths: Dir[],
 	className?: string,
 }
-export default function Breadcrumb({ paths, className }: breadcrumbProps) {
+// !Readonly from sonarqube
+export default function Breadcrumb({ paths, className }: Readonly<BreadcrumbProps>) {
 	const pathManager = useContext(PathManagerContext)
 	const [dropdown, setDropdown] = useState<Dir[]>([])
 	function handleDirFetch(paths: Dir[]) {
 		fetcher.fetchCollection(paths.slice(0, -1).map(path => path.href), true).then((dirs) => {
-			setDropdown(dirs.filter(dir => dir.href !== '../' && dir.href !== paths[paths.length - 1].href))
+			setDropdown(dirs!.filter(dir => dir.href !== '../' && dir.href !== paths[paths.length - 1].href))
 		})
 	}
 	return (
@@ -42,13 +41,13 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 							// @todo 容易出现不同切换的串台问题……
 								<HoverCardContent align="start" className="max-h-[min(80vh,400px)] overflow-y-auto">
 									{dropdown.map((item, index_dropdown) =>
-										<a key={index_dropdown} className="block px-1 py-0.5 rounded-default hover:text-primary-dark! transition-colors" onClick={() => {
+										<button key={index_dropdown} className="block px-1 py-0.5 rounded-default hover:text-primary-dark! transition-colors" onClick={() => {
 											const newPaths = [...paths.slice(0, index_path), item]
 											pathManager.set(newPaths)
 											handleDirFetch(newPaths)
 										}}>
 											{item.name.replaceAll('/', '')}
-										</a>
+										</button>
 									)}
 								</HoverCardContent>
 							}

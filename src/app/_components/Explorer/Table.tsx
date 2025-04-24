@@ -3,13 +3,11 @@ import { PathManagerContext } from "@/app/page"
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
-import { pathManager } from "@/utils/usePathManager"
+// import { pathManager } from "@/utils/usePathManager"
 import { decodeFileType, formatDate } from "@/utils/decode"
-import { fetcher } from "@/utils/fetcher"
 import { Autoindex_Raw, Indexes } from "@/utils/types"
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, Row, TableOptions, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, Row, useReactTable } from '@tanstack/react-table'
 import { useContext, useState } from "react"
-import { File, FileArchive, FolderClosed, Slash } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
 	data: Indexes,
@@ -50,7 +48,7 @@ const columns: ColumnDef<Autoindex_Raw, keyof Autoindex_Raw>[] = [
 	}
 ]
 
-export default function ExplorerTable<TData, TValue>({ data, className }: DataTableProps<TData, TValue>) {
+export default function ExplorerTable<TData, TValue>({ data, className }: Readonly<DataTableProps<TData, TValue>>) {
 	const pathManager = useContext(PathManagerContext)
 	const [pagination, setPagination] = useState({
 		pageIndex: 0,
@@ -78,7 +76,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 			pathManager.prev() :
 			pathManager.next({ name: row.original.name, href: row.original.href })
 	}
-	function PaginationPage({ index }: { index: number }) {
+	function PaginationPage({ index }: Readonly<{ index: number }>) {
 		return (
 			<PaginationItem onClick={() => {
 				table.setPageIndex(index)
@@ -136,11 +134,11 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 				<Pagination>
 					<PaginationContent>
 						<PaginationItem >
-							<PaginationPrevious className={`${!table.getCanPreviousPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (!table.getCanPreviousPage()) return; table.previousPage() }} />
+							<PaginationPrevious className={`${!table.getCanPreviousPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (table.getCanPreviousPage()) table.previousPage() }} />
 						</PaginationItem>
 						{Array.from({ length: table.getPageCount() }).map((_, index) => <PaginationPage key={index} index={index} />)}
 						<PaginationItem>
-							<PaginationNext className={`${!table.getCanNextPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (!table.getCanNextPage()) return; table.nextPage() }} />
+							<PaginationNext className={`${!table.getCanNextPage() && 'text-gray-300 hover:text-gray-400 cursor-not-allowed'}`} onClick={() => { if (table.getCanNextPage()) table.nextPage() }} />
 						</PaginationItem>
 					</PaginationContent>
 				</Pagination>
