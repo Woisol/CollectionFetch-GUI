@@ -12,7 +12,7 @@ export const fetcher: Fetcher = {
 	fetchCollection: async (path, index_only) => {
 		// @todo use testHTML instead
 		if (fetcher.DEBUG_MODE) return decodeAutoindex(testHTML)
-		const isDir = path[path.length - 1].endsWith('/') || path[path.length - 1] === ''
+		const isDir = path.length === 0 || path[path.length - 1].endsWith('/') || path[path.length - 1] === ''
 		if (!isDir) { window.open(`${fetcher.SERVER_URL}/files/${path.join('/')}`); return; }
 		let res
 		switch (fetcher.QUERY_METHOD) {

@@ -129,7 +129,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
 				</TableBody>
 			</Table>
-			{/* @todo 分页还没做呢…… */}
+			{/* @todod 分页还没做呢…… */}
 			{/* // ! 所以原来m-auto要flex上下文才能生效的？？？ */}
 			<div className="block w-fit h-9 mt-auto mx-auto">
 				<Pagination>
