@@ -22,6 +22,7 @@ export default function Breadcrumb({ paths, className }: breadcrumbProps) {
 	}
 	return (
 		<BreadcrumbShadcn className={cn('w-full h-12 select-none overflow-x-auto overflow-y-hidden', className)} onWheel={(event) => { event.preventDefault(); event.currentTarget.scrollLeft += event.deltaY }}>
+			{/* @todo 文本编辑？ */}
 			<BreadcrumbList className="gap-1 sm:gap-1 flex-nowrap">
 				{paths.map((path, index_path) =>
 					// @todo 维护一下Home的问题……

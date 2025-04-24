@@ -26,6 +26,8 @@ export type Fetcher = {
 	QUERY_METHOD: 'nginx' | 'server'
 	permissionToken: string,
 	fetchCollection: (path: Path, index_only?: boolean) => Promise<(Autoindex_Raw | Dir)[] | undefined>,
+	fetchFile: (path: string[]) => Promise<string | undefined>,
+
 }
 
 export type FileType = 'directory' | 'zip' | 'code' | 'media' | 'video' | 'book' | 'url' | 'file' | 'prev'

@@ -1,12 +1,17 @@
 import {JSDOM} from 'jsdom'
 import { Autoindex_Raw, Dir, FileType } from './types'
+import { toast } from 'sonner'
+import { fetcher } from './fetcher'
+import { dir } from './usePathManager'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-export function decodeAutoindex(html: string, index_only?: boolean): (Autoindex_Raw | Dir)[] {
+export async function decodeAutoindex(html: string, index_only?: boolean): Promise<(Autoindex_Raw | Dir)[]> {
 	const res: (Autoindex_Raw | Dir)[] = []
 
 	// @todo Error: Could not parse CSS stylesheet
 	const dom = new JSDOM(html)
 	const bodylines = dom.window.document.body.innerHTML.split('\n')
+	let readme: string | undefined
+	let URLContent: string | undefined;
 	for (var i in bodylines) {
 		if (bodylines[i].search(/<script>/) !== -1)
 			break
@@ -18,24 +23,47 @@ export function decodeAutoindex(html: string, index_only?: boolean): (Autoindex_
 				res.push({ name, href })
 			}
 		} else {
-			const m = /\s*<a href="(.+?)">(.+?)<\/a>\s*(\S+)\s+(\S+)\s+(\S+)\s*/.exec(bodylines[i])
+			const m = /\s*<a href="(.+?)">(.+?)<\/a>(?:\s*(\S+)\s+(\S+)\s+(\S+)\s*)?/.exec(bodylines[i])
 			if (m) {
 				const href: string = m[1]
 				const name: string = m[2]
-				const size: string = m[5]
-				const _parse = new Date(m[3] + ' ' + m[4])
-				const modifiedAt: Date = _parse === undefined ? new Date(0) : _parse // 解析错误则1970/1/1 00:00:00
-				res.push({ name, href, modifiedAt, size })
-			} else {
-				const m = /\s*<a href="(.+?)">(.+?)<\/a>/.exec(bodylines[i])
-				if (m) {
-					const href: string = m[1]
-					const name: string = m[2]
-					res.push({ name, href, size: '' })
+				const size: string = m[5] || ''
+				const modifiedAt: Date | undefined = m[3] && m[4] ? new Date(m[3] + ' ' + m[4]) : undefined
+				res.push({ name, href, size, modifiedAt })
+				switch (name.toLowerCase()) {
+					case 'readme.md':
+						fetch(href).then((res) => {
+							res.text().then(text => { readme = text })
+						})
+						// @todo implement
+						break
+					case 'url.md':
+						// @todo 没有浏览器路由难以实现……dir存在pathManager里面了
+						await fetcher.fetchFile([...dir.map(dir => dir.href), href]).then(text => {
+							URLContent = text;
+						})
+						break
+
 				}
 			}
 		}
 	}
+	if (URLContent) {
+		const URLines = URLContent.split('\n')
+		const TimeRegex = /(?<=@)\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g
+		let m
+		for (let URLine of URLines) {
+			m = /\*\s*\[(.+?)\]\((.+?)\)(.*)/.exec(URLine)
+			if (m) {
+				const href: string = m[2]
+				const name: string = m[1]
+				const size: string = '-'
+				const modifiedAt: Date | undefined = m[3].match(TimeRegex) ? new Date(m[3].match(TimeRegex)?.toString()!) : undefined
+				res.push({ name, href, size, modifiedAt })
+			}
+		}
+	}
+	// !哦豁改成async不需要把返回值也改成Promise
 	return res
 }
 export function formatDate(date?: Date, DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S') {

@@ -28,15 +28,24 @@ import { PathManager, Dir, Autoindex_Raw, Path } from "./types";
 // }
 // export const autoIndexManager = new AutoIndexManager();
 
+// @todo enhance……
+export let dir: Dir[] = [];
+
 export default function usePathManager() {
 	// @todo 完善从localStorage初始化逻辑
 	let [dir, setDir] = useState<Dir[]>([])
+	function handleDirChange(newDir: Dir[]) {
+		dir = newDir;
+		setDir(newDir)
+	}
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])
 	const _push = (newDir: Dir, autoindex: Autoindex_Raw[]) => {
-		setDir([...dir, newDir])
+		handleDirChange([...dir, newDir])
 		setIndexes(autoindex)
 	}
 	const next = (path: Dir) => {
+		// !一开始是同步函数也莫名其妙就这样写了，正好改成异步不用改
+		// ！同步函数也可以使用.then
 		fetcher.fetchCollection([...dir.map(path => path.href), path.href]).then((res) => {
 			if (!res) return;
 			_push(path, res as Autoindex_Raw[])
@@ -45,18 +54,23 @@ export default function usePathManager() {
 	const prev = () => {
 		if (dir.length === 1) {
 			if (dir[0].name === 'Home') return;
-			setDir([{ name: 'Home', href: '' }]);
+			handleDirChange([{ name: 'Home', href: '' }]);
 		} else
-			setDir(dir.slice(0, -1))
+			handleDirChange(dir.slice(0, -1))
 		fetcher.fetchCollection(dir.slice(0, -1).map(path => path.href)).then((res) => {
 			setIndexes(res as Autoindex_Raw[])
 		})
 	}
 	const set = (dirs: Dir[]) => {
 		fetcher.fetchCollection(dirs.map(path => path.href)).then((res) => {
-			setDir(dirs)
+			handleDirChange(dirs)
 			setIndexes(res as Autoindex_Raw[])
 		})
 	}
 	return { dir, indexes, _push, next, prev, set }
 }
+// const getContent = (name: string) => {
+// 	fetcher.fetchFile([...dir.map(path => path.href), name]).then((res) => {
+// 		return res
+// 	})
+// }
