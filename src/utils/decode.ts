@@ -1,9 +1,10 @@
 import {JSDOM} from 'jsdom'
-import { Autoindex_Raw, Dir } from './types'
+import { Autoindex_Raw, Dir, FileType } from './types'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 export function decodeAutoindex(html: string, index_only?: boolean): (Autoindex_Raw | Dir)[] {
 	const res: (Autoindex_Raw | Dir)[] = []
 
+	// @todo Error: Could not parse CSS stylesheet
 	const dom = new JSDOM(html)
 	const bodylines = dom.window.document.body.innerHTML.split('\n')
 	for (var i in bodylines) {
@@ -59,4 +60,27 @@ export function decodeDir(dir: string): Dir[] {
 		res.push({ name: dirs[i], href: encodeURIComponent(dirs[i]) + '/' })
 	}
 	return res
+}
+
+export function decodeFileType(name: string): FileType {
+	if (name === '../') {
+		return 'prev'
+	} else if (/\/$/.test(name)) {
+		return 'directory'
+	} else if (/\.(zip|7z|bz2|gz|tar|tgz|tbz2|xz|cab)$/.test(name)) {
+		return 'zip'
+	} else if (/\.(py|js|php|pl|rb|sh|bash|lua|sql|go|rs|java|c|h|cpp|cxx|hpp)$/.test(name)) {
+		return 'code'
+	} else if (/\.(jpg|png|bmp|gif|ico|webp)$/.test(name)) {
+		return 'media'
+	} else if (/\.(flv|mp4|mkv|avi|mkv|vp9)$/.test(name)) {
+		return 'video'
+		// use startsWith instead
+		// } else if (/^http/.test(name)) {
+	} else if (name.startsWith('http')) {
+		return 'url'
+	} else {
+		return 'file'
+	}
+
 }

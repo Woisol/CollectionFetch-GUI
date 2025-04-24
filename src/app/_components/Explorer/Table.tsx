@@ -4,7 +4,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { pathManager } from "@/utils/usePathManager"
-import { formatDate } from "@/utils/decode"
+import { decodeFileType, formatDate } from "@/utils/decode"
 import { fetcher } from "@/utils/fetcher"
 import { Autoindex_Raw, Indexes } from "@/utils/types"
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, Row, TableOptions, useReactTable } from '@tanstack/react-table'
@@ -92,9 +92,10 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 	}
 	return (
 		// !在Table上border和overflow-hidden冲突()
-		<div className={cn("w-full h-[830px] pb-4 border-1 border-gray-300 overflow-hidden select-none flex flex-col", className)} >
-			<Table className="flex-1" >
-				<TableHeader className="bg-background">
+		<div className={cn("w-full h-[830px] max-h-[calc(100%-48px)] pb-4 border-1 border-gray-300 overflow-hidden select-none flex flex-col", className)} >
+			<Table className="flex-1 relative" >
+				{/* @todo sticky无法解决 */}
+				<TableHeader className="bg-background sticky">
 					{table.getHeaderGroups().map(headerGroup => {
 						return (
 							<TableRow key={headerGroup.id}>
@@ -118,7 +119,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 					{table.getRowCount() ?
 						table.getRowModel().rows.map(row => {
 							return (
-								<TableRow key={row.id} onClick={() => { handleRowClick(row) }}>
+								<TableRow key={row.id} className={decodeFileType(row.original.href)} onClick={() => { handleRowClick(row) }}>
 									{row.getVisibleCells().map(cell =>
 										<TableCell key={cell.id}>
 											{flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -129,7 +130,7 @@ export default function ExplorerTable<TData, TValue>({ data, className }: DataTa
 						}) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No Result</TableCell></TableRow>}
 				</TableBody>
 			</Table>
-			{/* @todod 分页还没做呢…… */}
+			{/* //dtodo 分页还没做呢…… */}
 			{/* // ! 所以原来m-auto要flex上下文才能生效的？？？ */}
 			<div className="block w-fit h-9 mt-auto mx-auto">
 				<Pagination>
