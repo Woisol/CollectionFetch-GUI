@@ -43,7 +43,11 @@ export default function usePathManager() {
 		})
 	}
 	const prev = () => {
-		setDir(dir.slice(0, -1))
+		if (dir.length === 1) {
+			if (dir[0].name === 'Home') return;
+			setDir([{ name: 'Home', href: '' }]);
+		} else
+			setDir(dir.slice(0, -1))
 		fetcher.fetchCollection(dir.slice(0, -1).map(path => path.href)).then((res) => {
 			setIndexes(res as Autoindex_Raw[])
 		})
