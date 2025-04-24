@@ -2,7 +2,6 @@ import { toast } from "sonner"
 import { testHTML } from "./constant_test"
 import { decodeAutoindex, decodeAutoindex_IndexOnly } from "./decode"
 import { Autoindex_Raw, Fetcher, Path } from "./types"
-import { Dir } from "fs"
 
 export const fetcher: Fetcher = {
 	DEBUG_MODE: false,

@@ -29,13 +29,13 @@ import { PathManager, Dir, Autoindex_Raw, Path } from "./types";
 // export const autoIndexManager = new AutoIndexManager();
 
 // @todo enhance……
-export let dir: Dir[] = [];
+export let curDir: Dir[] = [];
 
 export default function usePathManager() {
 	// @todo 完善从localStorage初始化逻辑
 	let [dir, setDir] = useState<Dir[]>([])
 	function handleDirChange(newDir: Dir[]) {
-		dir = newDir;
+		curDir = newDir;
 		setDir(newDir)
 	}
 	const [indexes, setIndexes] = useState<Autoindex_Raw[]>([])

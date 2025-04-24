@@ -2,7 +2,7 @@ import {JSDOM} from 'jsdom'
 import { Autoindex_Raw, Dir, FileType } from './types'
 import { toast } from 'sonner'
 import { fetcher } from './fetcher'
-import { dir } from './usePathManager'
+import { curDir } from './usePathManager'
 const DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 export async function decodeAutoindex(html: string, index_only?: boolean): Promise<(Autoindex_Raw | Dir)[]> {
 	const res: (Autoindex_Raw | Dir)[] = []
@@ -39,7 +39,7 @@ export async function decodeAutoindex(html: string, index_only?: boolean): Promi
 						break
 					case 'url.md':
 						// @todo 没有浏览器路由难以实现……dir存在pathManager里面了
-						await fetcher.fetchFile([...dir.map(dir => dir.href), href]).then(text => {
+						await fetcher.fetchFile([...curDir.map(dir => dir.href), href]).then(text => {
 							URLContent = text;
 						})
 						break
